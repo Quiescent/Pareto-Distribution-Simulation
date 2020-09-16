@@ -1,5 +1,77 @@
-const INITIAL_STATE = {};
+import {
+  TICK_SIMULATION,
+  PAUSE_SIMULATION,
+  RESET_SIMULATION,
+  START_SIMULATION
+} from '../actions/types';
+
+import { initialiseSimulation, tickSimulation } from '../lib/paretoSimulation';
+import { associationsToVisualisationData } from '../lib/associationsToVisualisationData';
+
+const INITIAL_STATE = {
+  currentTick: 0,
+  maxTicks: 1000,
+  running: false,
+  stepTime: 1000,
+  nodeCount: 0,
+  associations: [],
+};
 
 export const simulationReducer = (state = INITIAL_STATE, { type, payload }) =>  {
-  return state;  
+  switch (type) {
+  case START_SIMULATION: {
+    const {
+      maxTicks,
+      nodeCount,
+      stepTime
+    } = payload;
+
+    const initialAssociations = initialiseSimulation({ nodeCount: nodeCount });
+
+    return {
+      currentTick: 0,
+      running: true,
+      maxTicks,
+      nodeCount,
+      stepTime,
+      associations: initialAssociations,
+      graphData: associationsToVisualisationData(initialAssociations)
+    };
+  }
+  case TICK_SIMULATION: {
+    const {
+      maxTicks,
+      currentTick,
+      running,
+      associations
+    } = state;
+    if (!running) return state;
+    if (currentTick === maxTicks) return {
+      ...state,
+      running: false
+    };
+    // Side effecting for performance reasons
+    tickSimulation(associations);
+    return {
+      ...state,
+      currentTick: currentTick + 1,
+      graphData: associationsToVisualisationData(associations)
+    };
+  }
+  case RESET_SIMULATION: {
+    const initialAssociations = initialiseSimulation({ nodeCount: state.nodeCount });
+    return {
+      ...state,
+      running: false,
+      currentTick: 0,
+      associations: initialAssociations,
+      graphData: associationsToVisualisationData(initialAssociations)
+    };
+  }
+  case PAUSE_SIMULATION: return {
+    ...state,
+    running: false
+  };
+  default: return state;
+  }
 };

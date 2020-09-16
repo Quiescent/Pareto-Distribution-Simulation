@@ -12,14 +12,22 @@ export const associationsToVisualisationData = ({ associations }) => {
   // Omit links and see whether it works first...
   const graphData = {
     nodes: [],
+    links: []
   };
 
   for (let l = 0; l < nodeCount; ++l) {
     groups[l] = findRoot(l);
     graphData.nodes.push({
-      id: l,
+      id: `${l}`,
       group: groups[l]
     });
+    if (groups[l] !== l) {
+      graphData.links.push({
+        source: `${l}`,
+        target: `${groups[l]}`,
+        value: 1
+      });
+    }
   }
 
   return graphData;

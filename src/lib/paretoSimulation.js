@@ -8,7 +8,7 @@ export const initialiseSimulation = ({ nodeCount }) => {
   };
 };
 
-const MAX_TRIALS = 1000000;
+const MAX_TRIALS = 1000;
 
 const selectRandom = (upperBound, dontSelect = null) => {
   let selection = Math.floor(upperBound * Math.random());
@@ -36,5 +36,8 @@ export const tickSimulation = ({ associations }) => {
   const selectionTwo = selectRandom(itemCount, selectionOne);
 
   const rootOne = findRoot(associations, selectionOne);
-  associations[rootOne] = selectionTwo;
+  const rootTwo = findRoot(associations, selectionTwo);
+
+  // Dont form loops in the associations!
+  if (rootOne !== rootTwo) associations[rootOne] = selectionTwo;
 };
