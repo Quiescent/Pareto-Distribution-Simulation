@@ -39,5 +39,5 @@ export const tickSimulation = ({ associations }) => {
   const rootTwo = findRoot(associations, selectionTwo);
 
   // Dont form loops in the associations!
-  if (rootOne !== rootTwo) associations[rootOne] = selectionTwo;
+  if (rootOne !== rootTwo) associations[rootOne] = rootTwo;
 };
