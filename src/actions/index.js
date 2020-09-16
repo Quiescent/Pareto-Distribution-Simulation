@@ -1,7 +1,9 @@
 import {
   TICK_SIMULATION,
   PAUSE_SIMULATION,
-  RESET_SIMULATION, START_SIMULATION
+  RESET_SIMULATION,
+  START_SIMULATION,
+  ADVANCE_TO_COMPLETION
 } from './types';
 
 export const tickSimulation = () => ({
@@ -46,3 +48,28 @@ export const startSimulation = ({ nodeCount, maxTicks, stepTime }) => (dispatch,
 export const resetSimulation = () => ({
   type: RESET_SIMULATION
 });
+
+export const advanceToCompletion = () => (dispatch, getState) => {
+  dispatch({
+    type: ADVANCE_TO_COMPLETION
+  });
+
+  const tickIfNotComplete = () => {
+    const {
+      simulation: {
+        currentTick,
+        maxTicks,
+        running,
+        stepTime
+      }
+    } = getState();
+    if (running && currentTick < maxTicks) {
+      dispatch(tickSimulation());
+      setTimeout(tickIfNotComplete, stepTime);
+    }
+  };
+
+  if (!getState().running) {
+    tickIfNotComplete();
+  }
+};

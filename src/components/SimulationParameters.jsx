@@ -6,9 +6,10 @@ import { reduxForm } from 'redux-form';
 import {
   pauseSimulation,
   startSimulation,
-  resetSimulation
+  resetSimulation,
+  advanceToCompletion
 } from '../actions';
-
+import { downloadGroups } from '../lib/downloadGroups';
 
 const validate = ({ maxTicks, nodeCount, stepTime }) => Object.assign(
   {},
@@ -17,13 +18,15 @@ const validate = ({ maxTicks, nodeCount, stepTime }) => Object.assign(
   { stepTime: !stepTime ? 'Please enter the length of each step in milliseconds': '' }
 );
 
+const mapStateToProps = ({ simulation }) => ({ data: simulation.graphData });
+
 const wireUpRedux = component => reduxForm(
   {
     form: 'simulation',
     validate
   }
 )(
-  connect(null, { startSimulation, pauseSimulation, resetSimulation })(component)
+  connect(mapStateToProps, { startSimulation, pauseSimulation, resetSimulation, advanceToCompletion })(component)
 );
 
 const Input = (props) => {
@@ -50,7 +53,14 @@ const preventingDefault = f => e => {
   f(e);
 };
 
-export const SimulationParameters = wireUpRedux(({ handleSubmit, startSimulation, pauseSimulation, resetSimulation }) => (
+export const SimulationParameters = wireUpRedux(({
+  handleSubmit,
+  startSimulation,
+  pauseSimulation,
+  resetSimulation,
+  advanceToCompletion,
+  data
+}) => (
   <form className="ui error form">
     <h3>
       Simulation Parameters
@@ -92,7 +102,7 @@ export const SimulationParameters = wireUpRedux(({ handleSubmit, startSimulation
       </button>
       <br/>
       <br/>
-      <button className="ui labeled icon button" onClick={ handleSubmit(() => { alert('TODO'); }) }>
+      <button className="ui labeled icon button" onClick={ handleSubmit(advanceToCompletion) }>
         <i className="right arrow icon"/>
         Complete
       </button>
@@ -104,7 +114,7 @@ export const SimulationParameters = wireUpRedux(({ handleSubmit, startSimulation
       </button>
       <br/>
       <br/>
-      <button className="ui labeled icon button" onClick={ preventingDefault(() => { alert('TODO'); }) }>
+      <button className="ui labeled icon button" onClick={ preventingDefault(() => { downloadGroups(data); }) }>
         <i className="download icon"/>
         Download
       </button>

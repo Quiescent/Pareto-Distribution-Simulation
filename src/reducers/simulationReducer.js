@@ -2,7 +2,8 @@ import {
   TICK_SIMULATION,
   PAUSE_SIMULATION,
   RESET_SIMULATION,
-  START_SIMULATION
+  START_SIMULATION,
+  ADVANCE_TO_COMPLETION
 } from '../actions/types';
 
 import { initialiseSimulation, tickSimulation } from '../lib/paretoSimulation';
@@ -15,6 +16,7 @@ const INITIAL_STATE = {
   stepTime: 1000,
   nodeCount: 0,
   associations: [],
+  display: true
 };
 
 export const simulationReducer = (state = INITIAL_STATE, { type, payload }) =>  {
@@ -34,6 +36,7 @@ export const simulationReducer = (state = INITIAL_STATE, { type, payload }) =>  
       maxTicks,
       nodeCount,
       stepTime,
+      display: true,
       associations: initialAssociations,
       graphData: associationsToVisualisationData(initialAssociations)
     };
@@ -46,8 +49,9 @@ export const simulationReducer = (state = INITIAL_STATE, { type, payload }) =>  
       associations
     } = state;
     if (!running) return state;
-    if (currentTick === maxTicks) return {
+    if (currentTick === maxTicks - 1) return {
       ...state,
+      display: true,
       running: false
     };
     // Side effecting for performance reasons
@@ -62,10 +66,19 @@ export const simulationReducer = (state = INITIAL_STATE, { type, payload }) =>  
     const initialAssociations = initialiseSimulation({ nodeCount: state.nodeCount });
     return {
       ...state,
+      display: true,
       running: false,
       currentTick: 0,
       associations: initialAssociations,
       graphData: associationsToVisualisationData(initialAssociations)
+    };
+  }
+  case ADVANCE_TO_COMPLETION: {
+    return {
+      ...state,
+      running: true,
+      display: false,
+      stepTime: 0
     };
   }
   case PAUSE_SIMULATION: return {
