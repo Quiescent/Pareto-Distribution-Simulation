@@ -9,26 +9,26 @@ export const associationsToVisualisationData = ({ associations }) => {
     return current;
   };
 
-  // Omit links and see whether it works first...
-  const graphData = {
-    nodes: [],
-    links: []
-  };
-
+  const groupCounts = {};
   for (let l = 0; l < nodeCount; ++l) {
-    groups[l] = findRoot(l);
-    graphData.nodes.push({
-      id: `${l}`,
-      group: groups[l]
-    });
-    if (groups[l] !== l) {
-      graphData.links.push({
-        source: `${l}`,
-        target: `${groups[l]}`,
-        value: 1
-      });
-    }
+    const currentGroup = findRoot(l);
+    groups[l] = currentGroup;
+    if (!groupCounts[currentGroup]) groupCounts[currentGroup] = 0;
+    ++groupCounts[currentGroup];
   }
 
-  return graphData;
+  const data = [];
+  let label = 0;
+  Object.values(groupCounts).forEach(groupCount => {
+    data.push({
+      category: `${label}`,
+      value: groupCount,
+      valueColor: 'hsl(8, 70%, 50%)'
+    });
+    ++label;
+  });
+
+  // data.sort((one, other) => one.value < other.value);
+
+  return data;
 };
