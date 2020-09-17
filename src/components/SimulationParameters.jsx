@@ -10,6 +10,7 @@ import {
   advanceToCompletion
 } from '../actions';
 import { downloadGroups } from '../lib/downloadGroups';
+import { associationsToVisualisationData } from '../lib/associationsToVisualisationData';
 
 const validate = ({ maxTicks, nodeCount, stepTime }) => Object.assign(
   {},
@@ -18,7 +19,7 @@ const validate = ({ maxTicks, nodeCount, stepTime }) => Object.assign(
   { stepTime: !stepTime ? 'Please enter the length of each step in milliseconds': '' }
 );
 
-const mapStateToProps = ({ simulation }) => ({ data: simulation.graphData });
+const mapStateToProps = ({ simulation }) => ({ data: simulation.graphData, associations: simulation.associations });
 
 const wireUpRedux = component => reduxForm(
   {
@@ -59,7 +60,8 @@ export const SimulationParameters = wireUpRedux(({
   pauseSimulation,
   resetSimulation,
   advanceToCompletion,
-  data
+  data,
+  associations
 }) => (
   <form className="ui error form">
     <h3>
@@ -114,7 +116,7 @@ export const SimulationParameters = wireUpRedux(({
       </button>
       <br/>
       <br/>
-      <button className="ui labeled icon button" onClick={ preventingDefault(() => { downloadGroups(data); }) }>
+      <button className="ui labeled icon button" onClick={ preventingDefault(() => { downloadGroups(associationsToVisualisationData(associations)); }) }>
         <i className="download icon"/>
         Download
       </button>

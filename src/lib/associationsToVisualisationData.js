@@ -28,7 +28,5 @@ export const associationsToVisualisationData = ({ associations }) => {
     ++label;
   });
 
-  // data.sort((one, other) => one.value < other.value);
-
   return data;
 };

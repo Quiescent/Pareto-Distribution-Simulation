@@ -3,7 +3,8 @@ import {
   PAUSE_SIMULATION,
   RESET_SIMULATION,
   START_SIMULATION,
-  ADVANCE_TO_COMPLETION
+  ADVANCE_TO_COMPLETION,
+  UPDATE_VISUALISATION_DATA
 } from './types';
 
 export const tickSimulation = () => ({
@@ -13,6 +14,30 @@ export const tickSimulation = () => ({
 export const pauseSimulation = () => ({
   type: PAUSE_SIMULATION
 });
+
+const VISUALISATION_UPDATE_TIME = 1000;
+const MAX_NODES_TO_VISUALISE = 1000;
+
+export const updateVisualisationData = () => (dispatch, getState) => {
+  const updateIfNotComplete = () => {
+    const { simulation: { running, nodeCount } } = getState();
+    if (running && nodeCount <= MAX_NODES_TO_VISUALISE) {
+      dispatch({
+        type: UPDATE_VISUALISATION_DATA
+      });
+      setTimeout(updateIfNotComplete, VISUALISATION_UPDATE_TIME);
+    }
+  };
+
+  dispatch({
+    type: UPDATE_VISUALISATION_DATA
+  });
+
+  setTimeout(
+    updateIfNotComplete,
+    VISUALISATION_UPDATE_TIME
+  );
+};
 
 export const startSimulation = ({ nodeCount, maxTicks, stepTime }) => (dispatch, getState) => {
   const tickIfNotComplete = () => {
@@ -38,6 +63,10 @@ export const startSimulation = ({ nodeCount, maxTicks, stepTime }) => (dispatch,
       stepTime
     }
   });
+
+  if (nodeCount <= MAX_NODES_TO_VISUALISE) {
+    dispatch(updateVisualisationData());
+  }
 
   setTimeout(
     tickIfNotComplete,
