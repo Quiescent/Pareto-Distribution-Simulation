@@ -15,6 +15,8 @@ const mapStateToProps = ({ simulation }) => {
   };
 };
 
+const MAX_CATEGORIES_TO_RENDER = 200;
+
 export const Visualisation =  connect(mapStateToProps)(({ data, currentTick, maxTick, running, display }) => {
   const containerRef = useRef();
 
@@ -31,7 +33,15 @@ export const Visualisation =  connect(mapStateToProps)(({ data, currentTick, max
           </div>): null
       }
       {
-        display && data ?
+        data && data.length > MAX_CATEGORIES_TO_RENDER ?
+          (
+            <h3>
+              Too many categories to render...
+            </h3>
+          ): null
+      }
+      {
+        display && data && data.length <= MAX_CATEGORIES_TO_RENDER ?
           (
             <ResponsiveBar
               data={ data }
