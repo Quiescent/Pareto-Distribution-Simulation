@@ -1,18 +1,10 @@
 export const downloadGroups = (data) => {
-  const groupCounts = {};
-
-  data.nodes.forEach(({ group }) => {
-    if (!groupCounts[group]) groupCounts[group] = 0;
-    groupCounts[group]++;
-  });
-
   let csvText = "data:text/csv;charset=utf-8,'groupId','memberCount'\r\n";
 
-  Object
-    .keys(groupCounts)
-    .sort()
-    .forEach(id =>
-      csvText += `${id},${groupCounts[id]}\r\n`
+  data
+    .sort((one, other) => one.value < other.value)
+    .forEach(({ category, value }) =>
+      csvText += `${category},${value}\r\n`
     );
 
   window.open(encodeURI(csvText));
