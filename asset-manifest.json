@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/Pareto-Distribution-Simulation/static/css/main.e0a3801f.chunk.css",
+    "main.js": "/Pareto-Distribution-Simulation/static/js/main.37afa49f.chunk.js",
+    "main.js.map": "/Pareto-Distribution-Simulation/static/js/main.37afa49f.chunk.js.map",
+    "runtime-main.js": "/Pareto-Distribution-Simulation/static/js/runtime-main.7442957c.js",
+    "runtime-main.js.map": "/Pareto-Distribution-Simulation/static/js/runtime-main.7442957c.js.map",
+    "static/js/2.bef96e50.chunk.js": "/Pareto-Distribution-Simulation/static/js/2.bef96e50.chunk.js",
+    "static/js/2.bef96e50.chunk.js.map": "/Pareto-Distribution-Simulation/static/js/2.bef96e50.chunk.js.map",
+    "index.html": "/Pareto-Distribution-Simulation/index.html",
+    "precache-manifest.6d78a51b19bc4f2d987371684da086fc.js": "/Pareto-Distribution-Simulation/precache-manifest.6d78a51b19bc4f2d987371684da086fc.js",
+    "service-worker.js": "/Pareto-Distribution-Simulation/service-worker.js",
+    "static/css/main.e0a3801f.chunk.css.map": "/Pareto-Distribution-Simulation/static/css/main.e0a3801f.chunk.css.map",
+    "static/js/2.bef96e50.chunk.js.LICENSE.txt": "/Pareto-Distribution-Simulation/static/js/2.bef96e50.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.7442957c.js",
+    "static/js/2.bef96e50.chunk.js",
+    "static/css/main.e0a3801f.chunk.css",
+    "static/js/main.37afa49f.chunk.js"
+  ]
+}
